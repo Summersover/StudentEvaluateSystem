@@ -1,2 +1,1543 @@
-# StudentEvaluateSystem
-一个课程合作项目
+# 学生综合素质测评系统文档
+
+## 第一部分：系统概览
+
+### 1. 关键功能
+
+该系统中的关键功能主要有用户身份认证和授权、RBAC访问控制、信息数据存储与操作等。
+
+#### 1.1 用户身份认证和授权
+
+身份认证的原理是将用户提供的用户名和密码，与数据库存储的信息进行比对，验证凭证的正确性，并生成一个身份标识符，本系统采用Token来标识用户的登录状态。该身份标识符将在用户访问其他资源时用于验证用户的身份和权限。
+
+具体实现为在登录成功后，后端生成Token并返回给前端，前端将Token保存在客户端。在每次请求中，前端需要将Token放在请求头中（通常是通过Authorization头字段），后端通过解析Token来验证用户的身份和权限，并决定是否允许访问。
+
+#### 1.2 RBAC访问控制
+
+RBAC（Role-Based Access Control）是一种基于角色的访问控制模型，用于管理用户对系统资源的访问权限。RBAC模型将用户划分为不同的角色，每个角色具有一组权限。通过将用户与角色进行关联，可以实现灵活的权限管理。
+
+RBAC模型包含以下基本概念：
+
+- 用户（User）：系统中的实际用户，可以通过身份认证进行识别。
+- 角色（Role）：一组具有相似权限需求的用户。
+- 权限（Permission）：系统中的资源和操作，如页面、功能、API等。
+- 角色-权限关联（Role-Permission）：定义角色与权限之间的关联关系。
+- 用户-角色关联（User-Role）：定义用户与角色之间的关联关系。
+
+在本系统中，将权限细化为后端api接口的访问权限，和前端动态菜单权限，因此相应的权限表和映射表也进行了区分。
+
+在学生信息测评系统中，RBAC管理可以实现不同角色对系统资源的访问控制。学生角色只能访问自己的个人信息和相关评估内容，评委角色可以评审学生的研究情况并给出评分，学工角色可以管理学生的学籍信息和成绩。
+
+#### 1.3 信息数据存储与操作
+
+数据存储是学生信息测评系统中非常重要的功能，涉及学生信息、研究情况、评分记录等敏感数据的存储和管理。合理的数据存储方案可以确保数据的安全性、完整性和可访问性。本系统采用MySQL这一关系型数据库，并根据系统需求和数据结构进行表结构设计、数据关系建立等。
+
+定义适当的数据模型来存储学生信息、研究情况和评分记录等数据。同时，数据库的访问和操作需要进行良好的封装，以提供数据的增删改查功能，并确保数据的一致性和安全性。
+
+在项目代码中，可以看到与数据存储相关的部分，如实体类的定义、数据库操作的方法等。这些代码负责与数据库进行交互，实现数据的持久化和管理。
+
+### 2. 用户界面截图
+
+#### 2.1 学生用户
+
+1. 用户登录
+
+   学生用户2200022701
+
+   密码123456
+
+   ![image-20230705171317786](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705171317786.png)
+
+2. 学生首页
+
+   ![image-20230705171445202](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705171445202.png)
+
+3. 科研情况填报
+
+   ![image-20230705171549082](C:\Users\Summe\AppData\Roaming\Typora\typora-user-images\image-20230705171549082.png)
+
+4. 社会实践填报
+
+   ![image-20230705171626457](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705171626457.png)
+
+5. 学生服务填报
+
+   ![image-20230705171706287](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705171706287.png)
+
+6. 个人总结填报
+
+   ![image-20230705171741625](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705171741625.png)
+
+7. 学生成绩确认
+
+   ![image-20230705232352881](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705232352881.png)
+
+8. 志愿时长确认
+
+   ![image-20230705232416216](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705232416216.png)
+
+9. 学生上传材料
+
+   ![image-20230705232608385](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705232608385.png)
+
+   ![image-20230705232635761](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705232635761.png)
+
+#### 2.2 评委用户
+
+1. 评委首页
+
+   评委用户1200012700
+
+   密码123456
+
+   ![image-20230705233005786](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233005786.png)
+
+2. 科研情况评分
+
+   ![image-20230705233039768](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233039768.png)
+
+3. 科研情况评分详情
+
+   ![image-20230705233135615](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233135615.png)
+
+   ![](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233158276.png)
+
+其他部分评分均为类似界面。
+
+4. 学生成绩导入
+
+   ![image-20230705233402635](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233402635.png)
+
+   ![image-20230705233449005](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233449005.png)
+
+   ![image-20230705233522057](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233522057.png)
+
+其他表格导入均为类似界面。
+
+#### 2.3 学工用户
+
+1. 学工首页
+
+   学工用户1300012700
+
+   密码123456
+
+   ![image-20230705233702159](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705233702159.png)
+
+2. 学生信息导入
+
+   ![image-20230705235242414](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705235242414.png)
+
+3. 测评结果导出
+
+   ![image-20230705235316590](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705235316590.png)
+
+   ![image-20230705235338539](https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/image-20230705235338539.png)
+
+   
+
+## 第二部分：数据库表结构和字段描述
+
+### 1. 用户表 user
+
+| 字段名称 |   字段类型   | 允许为空 |           注释           |
+| :------: | :----------: | :------: | :----------------------: |
+|    id    |   int(11)    |    否    |         用户编号         |
+| username | varchar(255) |    否    | 用户名，学生用户即为学号 |
+| password | varchar(255) |    否    |           密码           |
+
+### 2. 学生列表 studentlist
+
+| 字段名称 |   字段类型   | 允许为空 |   注释   |
+| :------: | :----------: | :------: | :------: |
+|    id    |   int(11)    |    否    | 学生编号 |
+| username | varchar(255) |    否    | 学生学号 |
+|   name   | varchar(255) |    否    |   姓名   |
+
+### 3. 评分总表 marklist
+
+| 字段名称 |   字段类型   | 允许为空 |         注释         |
+| :------: | :----------: | :------: | :------------------: |
+|    id    |   int(11)    |    否    |       评分编号       |
+| username | varchar(255) |    是    |        用户名        |
+|   name   | varchar(50)  |    是    |         姓名         |
+|  rsmark  | varchar(255) |    是    |       科研评分       |
+|  wsmark  | varchar(255) |    是    | 学生骨干服务岗位评分 |
+|  spmark  | varchar(255) |    是    |     社会实践评分     |
+|  psmark  | varchar(255) |    是    |   个人学年总结评分   |
+|  pgmark  | varchar(255) |    是    |       GPA评分        |
+|  vsmark  | varchar(255) |    是    |     志愿服务评分     |
+| totmark  | varchar(255) |    是    |        总评分        |
+
+### 4. 科研情况表 researchsituation
+
+| 字段名称 |   字段类型   | 允许为空 |  注释  |
+| :------: | :----------: | :------: | :----: |
+|    id    |   int(11)    |    否    |  编号  |
+| username | varchar(255) |    否    | 用户名 |
+|   rank   | varchar(255) |    是    |  名次  |
+|   time   | varchar(255) |    是    |  时间  |
+|  place   | varchar(255) |    是    |  地点  |
+|  prize   | varchar(255) |    是    |  奖项  |
+
+### 5. 学生骨干岗位服务表 workservice
+
+| 字段名称 |   字段类型   | 允许为空 |     注释     |
+| :------: | :----------: | :------: | :----------: |
+|    id    |   int(11)    |    否    |     编号     |
+| username | varchar(255) |    否    |    用户名    |
+|   time   | varchar(255) |    是    |   起始时间   |
+|   job    | varchar(255) |    是    | 服务岗位名称 |
+|   post   | varchar(255) |    是    |     职务     |
+|  level   | varchar(255) |    是    |   考核级别   |
+
+### 6. 社会实践表 socialpractice
+
+| 字段名称  |   字段类型   | 允许为空 |     注释     |
+| :-------: | :----------: | :------: | :----------: |
+|    id     |   int(11)    |    否    |     编号     |
+| username  | varchar(255) |    否    |    用户名    |
+| initiator | varchar(255) |    是    |   发起单位   |
+|   spot    | varchar(255) |    是    |     地点     |
+|   days    | varchar(255) |    是    |     天数     |
+|   size    | varchar(255) |    是    |   团队人数   |
+|   post    | varchar(255) |    是    |   团队职务   |
+|  online   | varchar(255) |    是    |   是否线上   |
+|   award   | varchar(255) |    是    | 是否获得奖励 |
+| awardname | varchar(255) |    是    |   奖励名称   |
+
+### 7. 个人学年总结表1 personalstatement1
+
+个人总结中的多条目部分
+
+| 字段名称  |   字段类型   | 允许为空 |   注释   |
+| :-------: | :----------: | :------: | :------: |
+|    id     |   int(11)    |    否    |   编号   |
+| username  | varchar(255) |    否    |  用户名  |
+|   time    | varchar(255) |    是    |   时间   |
+|   spot    | varchar(255) |    是    |   地点   |
+|   level   | varchar(255) |    是    | 活动级别 |
+|   role    | varchar(255) |    是    |   角色   |
+| eventname | varchar(255) |    是    | 活动名称 |
+
+### 8. 个人学年总结表2 personalstatement2
+
+个人总结中的单条目部分
+
+| 字段名称  |   字段类型   | 允许为空 |   注释   |
+| :-------: | :----------: | :------: | :------: |
+|    id     |   int(11)    |    否    |   编号   |
+| username  | varchar(255) |    否    |  用户名  |
+| behaviour | varchar(255) |    是    | 行为规范 |
+|   study   | varchar(255) |    是    | 学习态度 |
+|  health   | varchar(255) |    是    | 身体健康 |
+
+### 9. 学生成绩表 gpalist
+
+| 字段名称 |   字段类型   | 允许为空 |  注释  |
+| :------: | :----------: | :------: | :----: |
+|    id    |   int(11)    |    否    |  编号  |
+| username | varchar(255) |    否    | 用户名 |
+|   name   | varchar(255) |    否    |  姓名  |
+|  grade   | varchar(255) |    是    |  成绩  |
+|   gpa    | varchar(255) |    是    |  GPA   |
+|  gpmark  | varchar(255) |    是    |  评分  |
+
+### 10. 学生志愿服务表 volserlist
+
+| 字段名称 |   字段类型   | 允许为空 |   注释   |
+| :------: | :----------: | :------: | :------: |
+|    id    |   int(11)    |    否    |   编号   |
+| username | varchar(255) |    否    |  用户名  |
+|   name   | varchar(255) |    否    |   姓名   |
+|   time   | varchar(255) |    是    | 志愿时长 |
+|  vsmark  | varchar(255) |    是    |   评分   |
+
+### 11. 角色表 Role
+
+| 字段名称  |  字段类型   | 允许为空 |   注释   |
+| :-------: | :---------: | :------: | :------: |
+|    id     |   int(11)   |    否    |   编号   |
+|  role_id  |   int(11)   |    是    | 角色编号 |
+| role_name | varchar(50) |    是    |  角色名  |
+
+### 12. 用户角色表 UserRole
+
+| 字段名称 |   字段类型   | 允许为空 |   注释   |
+| :------: | :----------: | :------: | :------: |
+|    id    |   int(11)    |    否    |   编号   |
+| username | varchar(255) |    是    |  用户名  |
+| role_id  |   int(11)    |    是    | 角色编号 |
+
+### 13. 权限表 Permission
+
+|    字段名称     |  字段类型   | 允许为空 |  注释  |
+| :-------------: | :---------: | :------: | :----: |
+|       id        |   int(11)   |    否    |  编号  |
+| permission_name | varchar(50) |    是    | 权限名 |
+
+### 14. 角色权限表 RolePermission
+
+|   字段名称    | 字段类型 | 允许为空 |   注释   |
+| :-----------: | :------: | :------: | :------: |
+|      id       | int(11)  |    否    |   编号   |
+|    role_id    | int(11)  |    是    | 角色编号 |
+| permission_id | int(11)  |    是    | 权限编号 |
+
+### 15. 菜单表 Menu
+
+| 字段名称  |   字段类型   | 允许为空 |  注释  |
+| :-------: | :----------: | :------: | :----: |
+|    id     |   int(11)    |    否    |  编号  |
+|   name    | varchar(50)  |    是    | 菜单名 |
+|   path    | varchar(100) |    是    |  路径  |
+| component | varchar(100) |    是    | 组件名 |
+
+### 16. 角色菜单表 RoleMenu
+
+| 字段名称 | 字段类型 | 允许为空 |   注释   |
+| :------: | :------: | :------: | :------: |
+|    id    | int(11)  |    否    |   编号   |
+| role_id  | int(11)  |    是    | 角色编号 |
+| menu_id  | int(11)  |    是    | 菜单编号 |
+
+
+
+## 第三部分：系统核心功能模块与实现逻辑分析
+
+### 1. Token在身份认证以及权限管理中的功能及其在项目中的应用，并结合项目代码进行详细说明。
+
+#### 1.1 登录身份认证
+
+用户使用系统只需在登录时输入一次账号密码，即`AuthController`的`login()`方法，此后各种请求使用 Token 进行可信验证。`login()` 方法的<u>部分源码</u>如下：
+
+```java
+@PostMapping("/login")
+public CommonResult<?> login(@RequestBody LoginReqVO loginUser) {
+    //数据库查询验证身份
+    User user = userMapper.findByUsername(loginUser.getUsername());
+    if (!loginUser.getPassword().equals(user.getPassword())) {
+        return CommonResult.error(50007, "登录失败，账号密码不正确");
+    }
+
+    // 生成访问令牌和刷新令牌
+    String username = loginUser.getUsername();
+    String accessToken = jwtTokenUtil.generateAccessToken(username);
+    String refreshToken = jwtTokenUtil.generateRefreshToken(username);
+    TokenRespVO token_resp = new TokenRespVO(accessToken, refreshToken);
+    CommonResult<TokenRespVO> result = CommonResult.success(token_resp);
+    return result;
+}
+```
+
+- 用户登录通过用户名和密码进行身份验证。
+
+```java
+User user = userMapper.findByUsername(loginUser.getUsername());
+if (!loginUser.getPassword().equals(user.getPassword())) {
+    return CommonResult.error(50007, "登录失败，账号密码不正确");
+}
+```
+
+- 用户验证成功后，根据该用户名使用`jwtTokenUtil`工具生成访问令牌（AccessToken）和刷新令牌（RefreshToken），其中包含有用户的可信身份信息。
+
+```java
+String username = loginUser.getUsername();
+String accessToken = jwtTokenUtil.generateAccessToken(username);
+String refreshToken = jwtTokenUtil.generateRefreshToken(username);
+```
+
+- 并将两个令牌放在`TokenRespVO`中返回给网页。当用户发送受保护资源的请求时，可以将 AccessToken 放在请求的 `Authorization` 头部中进行身份验证。
+
+```java
+TokenRespVO token_resp = new TokenRespVO(accessToken, refreshToken);
+CommonResult<TokenRespVO> result = CommonResult.success(token_resp);
+return result;
+```
+
+#### 1.2 拦截器权限验证
+
+拦截器中的 `preHandle()` 方法用于验证请求的有效性和用户的权限。根据用户的角色（role）和请求的 URI，检查用户是否具有访问该资源的权限。
+
+`preHandle()` 方法的<u>部分源码</u>如下：
+
+```java
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    // 在请求处理之前执⾏的操作
+    String token = request.getHeader( "Authorization").substring(7);
+    String username = jwtTokenUtil.getUsernameFromToken(token);
+    String uri = request.getRequestURI();
+    String role = permissionMapper.findRole(username);
+
+    if (role.equals("学生") || role.equals("评委老师") || role.equals("学工老师")) {
+        // 根据请求的角色不同进行访问限制
+        ArrayList<String> permissions = permissionMapper.findPermission(username);
+        if(!permissions.contains(uri)){
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("You do not have the access to this resource.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+```
+
+- 具体为从请求头中截取出token，从token中取出用户名，可以确认用户真实性。
+
+```java
+String token = request.getHeader( "Authorization").substring(7);
+String username = jwtTokenUtil.getUsernameFromToken(token);
+```
+
+- 并根据该用户名进行权限查询。
+
+```java
+String role = permissionMapper.findRole(username);
+...
+ArrayList<String> permissions = permissionMapper.findPermission(username);
+```
+
+- 如果用户角色不是学生、评委老师或学工老师，或者用户不具有访问该资源的权限，将返回相应的错误响应。
+
+#### 1.3 动态菜单权限验证
+
+在动态菜单功能中，Token被用于验证当前用户的可信身份，以获取相应的菜单权限列表。动态菜单控制器`MenuController`中`getMenuList()`方法的源码如下：
+
+```java
+@GetMapping("/getMenu")
+public CommonResult<?> getMenuList(@RequestHeader("Authorization") String authHeader) {
+    String token = authHeader.substring(7);
+    String username = jwtTokenUtil.getUsernameFromToken(token);
+
+    ArrayList<Menu> menuList = menuMapper.findMenu(username);
+    CommonResult<ArrayList<Menu>> result = CommonResult.success(menuList);
+    return result;
+}
+```
+
+- 从请求头中截取出token，并从token中取出当前可信用户的用户名。
+
+```java
+String token = authHeader.substring(7);
+String username = jwtTokenUtil.getUsernameFromToken(token);
+```
+
+- 并根据该用户名进行动态菜单权限查询。
+
+```java
+ArrayList<Menu> menuList = menuMapper.findMenu(username);
+CommonResult<ArrayList<Menu>> result = CommonResult.success(menuList);
+return result;
+```
+
+Token还有其他类似的应用场景，如查询角色请求等。
+
+### 2. RBAC访问控制在项目中的实现方式，并结合项目代码进行详细说明。
+
+RBAC（Role-Based Access Control）是一种常见的访问控制模型，用于管理用户对系统资源的访问权限，确保用户在访问系统资源时按照其角色和权限进行合法的访问。在本项目中，主要通过角色定义、权限定义、访问控制和动态菜单四个部分来进行RBAC访问控制，本节主要说明前三部分，动态菜单将在下一节进行说明。
+
+#### 2.1角色定义
+
+- 项目中定义了不同的角色，包括学生、评委和学工，储存在数据库角色表中。
+
+```mysql
+CREATE TABLE Role (
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`role_id` INT,
+`role_name` VARCHAR(50)
+);
+
+INSERT INTO Role (role_id, role_name)
+VALUES (1, '学生'),
+(2, '评委老师'),
+(3, '学工老师');
+```
+
+- 通过调用 `permissionMapper.findRole(username)` 方法获取用户的角色信息。具体映射为通过用户角色表，将用户名和角色编号连接，查询获得角色名。
+
+```java
+String role = permissionMapper.findRole(username);
+```
+
+```mysql
+    <select id="findRole" resultType="String">
+        SELECT r.role_name
+        FROM UserRole ur
+                 JOIN Role r ON r.Id = ur.role_id
+        WHERE ur.username = #{username};
+    </select>
+```
+
+#### 2.2 权限定义
+
+- 每个角色具有不同的权限，决定了用户能够访问的资源。通过调用 `permissionMapper.findPermission(username)` 方法获取用户的权限列表。具体映射为，通过用户角色表、角色权限表，连接用户名、角色编号和权限编号。
+
+```java
+ArrayList<String> permissions = permissionMapper.findPermission(username);
+```
+
+```mysql
+    <select id="findPermission" resultType="String">
+        SELECT p.permission_name
+        FROM UserRole ur
+                 JOIN RolePermission rp ON rp.role_id = ur.role_id
+                 JOIN Permission p ON p.Id = rp.permission_id
+        WHERE ur.username = #{username};
+    </select>
+```
+
+#### 2.3 访问限制
+
+- 根据用户的角色和权限进行访问限制。在拦截器的 `preHandle()` 方法中，通过用户名获取角色。
+
+```java
+String token = request.getHeader( "Authorization").substring(7);
+String username = jwtTokenUtil.getUsernameFromToken(token);
+String uri = request.getRequestURI();
+String role = permissionMapper.findRole(username);
+```
+
+- 判断用户的角色是否为学生、评委老师或学工老师，不是则拒绝访问。
+
+```java
+if (role.equals("学生") || role.equals("评委老师") || role.equals("学工老师")) {
+    // 根据请求的角色不同进行访问限制
+} else {
+    // 不是有访问权限的角色
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.getWriter().write("You are not the authorized role.");
+    return false;
+}
+```
+
+- 如果是则通过`permissionMapper.findPermission(username)`获取用户的权限列表，并通过和当前 uri 比较来判断是否可以访问请求的资源。
+
+```java
+ArrayList<String> permissions = permissionMapper.findPermission(username);
+if(!permissions.contains(uri)){
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.getWriter().write("You do not have the access to this resource.");
+    return false;
+} else {
+    // 正常访问资源
+    return true;
+}
+```
+
+### 3. 项目中动态菜单的实现策略和方法，并结合项目代码进行详细说明。
+
+#### 3.1 后端获取菜单权限
+
+在`MenuController`的`getMenuList()`方法里，通过调用 `menuMapper.findMenu(username)` 方法获取用户所拥有的菜单列表。具体映射为，通过用户角色表、角色菜单表，连接用户名、角色编号和菜单编号，获取菜单名、路径和组件名。
+
+```java
+@GetMapping("/getMenu")
+public CommonResult<?> getMenuList(@RequestHeader("Authorization") String authHeader) {
+    String token = authHeader.substring(7);
+    String username = jwtTokenUtil.getUsernameFromToken(token);
+
+    ArrayList<Menu> menuList = menuMapper.findMenu(username);
+    CommonResult<ArrayList<Menu>> result = CommonResult.success(menuList);
+    return result;
+}
+```
+
+```mysql
+    <select id="findMenu" resultType="com.example.fengshenbang_spring.mapper.DO.Menu">
+        SELECT m.name, m.path, m.component
+        FROM UserRole ur
+                 JOIN RoleMenu rm ON rm.role_id = ur.role_id
+                 JOIN Menu m ON m.Id = rm.menu_id
+        WHERE ur.username = #{username};
+    </select>
+```
+
+#### 3.2 前端定义api
+
+应与后端相应 Controller 中 GetMapping 方法的路径一致。
+
+```js
+export function getMenu() {
+    return request({
+        url: '/menu/getMenu',
+        method: 'get',
+    })
+}
+
+export function getRole() {
+    return request({
+        url: '/menu/getRole',
+        method: 'get',
+    })
+}
+```
+
+#### 3.3 动态路由
+
+- 在路由文件中创建一个异步函数`fetchMenu()`用于获取菜单。
+
+```js
+async function fetchMenu() {
+    ...
+}
+```
+
+- `fetchMenu()`中首先调用`getMenu()`获取菜单权限列表。
+
+```js
+getMenu().then((res) => {
+    const menuList = res.data;
+    ...
+}
+```
+
+- 对菜单列表中的每一项都生成相应的路由对象`route`，分别设置从后端获得的路径`path`、菜单名`name`和调用的组件名`component`。最后用`router.addRoute()`方法将创建的 `route` 路由配置对象添加到路由器中。
+
+```js
+menuList.forEach(menu => {
+    const route = {
+        path: menu.path,
+        name: menu.name,
+        component: Layout,
+        children:[{
+            path: '',
+            component: () => import(`@/views/user/${menu.component}.vue`),
+        }]
+    };
+    router.addRoute(route);
+});
+```
+
+#### 3.4 动态菜单
+
+- 在 layout 文件钩子函数中调用`getMenu()`获取`menuList`，调用`getRole()`获取`role`。
+
+```js
+created() {
+    getRole().then((res)=> {
+        this.role = res.data;
+    });
+
+    getMenu().then((res)=> {
+        this.menuList = res.data;
+    });
+}
+```
+
+- 以学生用户为例：
+
+  `v-if="role === '学生'"`只有身份为学生才渲染该子菜单。
+
+  `<router-link>`路由链接组件，用于创建导航链接。其中各项属性`v-for="(menu, index) in menuList"`遍历 `menuList` 数组中的菜单项数据。`:to="menu.path"`根据菜单项的 `path` 属性来动态设置路由链接的目标路径。
+
+  `<span slot="title">{{ menu.name }}</span>`动态设置菜单名。
+
+```js
+<el-submenu index="1" v-if="role === '学生'">
+    <template slot="title">
+        <i class="el-icon-user-solid"></i>
+<span slot="title">学生用户</span>
+</template>
+<router-link v-for="(menu, index) in menuList" :key="index" :to="menu.path">
+    <el-menu-item :index="menu.path">
+        <span slot="title">{{ menu.name }}</span>
+</el-menu-item>
+</router-link>
+</el-submenu>
+```
+
+### 4. Excel表格导入功能的实现方法，并结合项目代码进行详细说明。
+
+以上传学生GPA情况为例。
+
+#### 4.1 前端上传表格文件
+
+- `template`中定义了上传按钮。其中的属性为：
+
+  `:action="apiUrl"`将 `apiUrl` 的值作为上传的目标地址，即文件上传的 API 端点。
+
+  `:on-success="handleSuccess"`指定上传成功时的回调函数`handleSuccess` 。
+
+  `:before-upload="beforeUpload"`指定在上传之前进行的校验操作，即 `beforeUpload` 方法。
+
+  `:on-exceed="handleExceed"`指定上传文件数量超过限制时的回调函数 `handleExceed` 。
+
+  `:file-list="fileList"`绑定 `fileList` 变量，用于存储已上传的文件列表。
+
+  `@change="uploadFile"`指定在文件选择发生变化时触发的回调函数 `uploadFile` 。
+
+```vue
+<el-upload
+           class="upload-demo"
+           :action="apiUrl"
+           :on-success="handleSuccess"
+           :before-upload="beforeUpload"
+           :on-exceed="handleExceed"
+           :file-list="fileList"
+           @change="uploadFile"
+           >
+    <el-button size="small" type="primary">点击上传成绩单</el-button>
+    <div slot="tip" class="el-upload__tip">请上传学生成绩单文件，包括学生学号，姓名，分数，GPA，以及对应的评分</div>
+    <div slot="tip" class="el-upload__tip">只能上传Excel文件，且不超过500kb</div>
+</el-upload>
+```
+
+- `beforeUpload()`方法在文件上传之前调用。检查文件类型是否是excel或sheet，大小是否小于500 KB。符合要求则设置`apiUrl`上传端点，和调用`uploadFile`方法来上传文件。
+
+```js
+beforeUpload(file) {
+    const isExcel =
+          file.type === 'application/vnd.ms-excel' ||
+          file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    const isLt500KB = file.size / 1024 < 500;
+    if (!isExcel) {
+        this.$message.error('只能上传Excel文件');
+    }
+    if (!isLt500KB) {
+        this.$message.error('文件大小不能超过500KB');
+    }
+    if (isExcel && isLt500KB) {
+        this.apiUrl = '/admin-api/studentGPA/upload'; // 设置 apiUrl
+        this.uploadFile(file); // 调用上传文件方法
+    }
+    return false; // 阻止自动上传
+},
+```
+
+- `uploadFile()`方法用于上传文件。使用`uploadStudentGPA()`函数发送文件，并在上传成功后调用`handleSuccess()`方法，否则显示上传失败的消息。
+
+```js
+uploadFile(file) {
+    uploadStudentGPA(file)
+        .then(response => {
+        this.handleSuccess(response, file);
+    })
+        .catch(error => {
+        console.error(error);
+        this.$message.error('文件上传失败');
+    });
+}
+```
+
+- `handleSuccess`方法在文件上传成功后调用。显示上传成功的消息，并在1秒后刷新页面。
+
+```js
+handleSuccess(response, file) {
+    console.log(response);
+    this.$message.success('文件上传成功，1秒后刷新页面');
+    setTimeout(() => {
+        location.reload()
+    }, 1000) // 1秒后刷新页面
+},
+```
+
+- `uploadStudentGPA()`函数将文件添加到表单数据中，传给后端相应路径，并在请求头中设置了内容类型为 `multipart/form-data`，表示上传的是表单数据。
+
+```js
+export function uploadStudentGPA(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return request({
+        url: '/studentGPA/upload',
+        method: 'post',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+    })
+}
+```
+
+#### 4.2 后端接收表格数据并存入数据库
+
+- 后端`uploadStudentGPA()`方法相应路径`@PostMapping("/upload")`。
+
+```java
+@RestController
+@RequestMapping("/admin-api/studentGPA")
+public class StudentGPAController {
+    private final StudentGPAService studentGPAService;
+    ...
+
+    @PostMapping("/upload")
+    public CommonResult<String> uploadStudentGPA(MultipartFile file){
+        ...
+    }
+```
+
+- 通过 `file.getInputStream()` 获取文件的输入流。
+
+```java
+InputStream inputStream = file.getInputStream();
+```
+
+- 创建 `StudentGPAListener` 监听器对象。使用 EasyExcel 库的 `EasyExcel.read()` 方法读取输入流中的 Excel 文件，并传入 `StudentGPAListener` 监听器进行监听。
+
+```java
+StudentGPAListener listener = new StudentGPAListener();
+EasyExcel.read(inputStream, StudentGPA.class, listener).sheet().doRead();
+```
+
+- 监听器中的 `invoke()` 方法会被调用，将读取到的每一行数据转换为 `StudentGPA` 对象，并存储在监听器的 `studentGPAList` 列表中。然后获取监听器中读取的数据列表，即 `studentGPAList`。
+
+```java
+List<StudentGPA> studentGPAList = listener.getStudentGPAList();
+```
+
+- 调用 `studentGPAService.processStudentGPAList()` 方法，将读取到的数据传入服务层进行处理。上传成功返回成功的响应结果 。
+
+```java
+studentGPAService.processStudentGPAList(studentGPAList);
+return CommonResult.success("上传成功");
+```
+
+- `StudentGPAService`服务层中，获取`processStudentGPAList`之后，对列表中每个对象都插入数据库。
+
+```java
+@Service
+public class StudentGPAService {
+    private final StudentGPAMapper studentGPAMapper;
+
+    public void processStudentGPAList(List<StudentGPA> studentGPAList) {
+        for (StudentGPA studentGPA : studentGPAList) {
+            studentGPAMapper.insertStudentGPA(studentGPA);
+            studentGPAMapper.insertMarkList(studentGPA);
+        }
+    }
+}
+```
+
+- 上传成功后以及每次进入该页面，前端都会发送请求通过mapper映射从数据库中获得GPA数据，并在前端用`tableData`接收，进行渲染呈现。
+
+### 5. Excel表格导出功能的实现方法，并结合项目代码进行详细说明。
+
+以导出总评分表为例。
+
+#### 5.1 前端定义导出
+
+- 该页面的挂载函数会调用`getTotalMarkList()`，请求后端通过mapper映射从数据库中获得总表数据，并在前端用`tableData`接收，进行渲染呈现。
+
+```js
+mounted() {
+    getTotalMarkList().then((res) => {
+        this.tableData = res.data;
+        console.log(this.tableData);
+    });
+},
+```
+
+- 在`template`中定义导出按钮，属性`@click="exportToExcel"`绑定点击事件调用`exportToExcel()`函数。
+
+```vue
+<h1>评测结果汇总</h1>
+<el-button size="small" type="primary" @click="exportToExcel">导出到Excel</el-button>
+<el-table :data="tableData">
+    ...
+</el-table>
+```
+
+- `exportToExcel()`函数具体步骤见以下源码注释：
+
+```js
+exportToExcel() {
+    Message.info('文件下载已开始，请稍候...');
+    //用XLSX工具创建一个Excel工作簿对象wb，并设置标题、主题、作者和创建日期属性
+    let wb = XLSX.utils.book_new();
+    wb.Props = {
+        Title: "评测结果汇总",
+        Subject: "评测结果",
+        Author: "Admin",
+        CreatedDate: new Date()
+    };
+    //工作簿添加一个工作表"评测结果"
+    wb.SheetNames.push("评测结果");
+    //创建一个二维数组ws_data，用于存储要导出到Excel中的数据。第一行为表头数据
+    let ws_data = [['学号', '姓名', '个人学年总结', '志愿服务', '学生成绩', '科研情况', '学生服务', '社会实践', '总评分']];
+    //把tableData的数据遍历填入数组中
+    this.tableData.forEach((row) => {
+        ws_data.push([row.username, row.name, row.psmark, row.vsmark, row.gpmark, row.rsmark, row.wsmark, row.spmark, row.totmark]);
+    });
+    //把表数据ws_data添加到表对象ws中
+    let ws = XLSX.utils.aoa_to_sheet(ws_data);
+    //把表对象ws添加到工作簿对象wb的"评测结果"工作表
+    wb.Sheets["评测结果"] = ws;
+    //使用XLSX.write()方法将工作簿对象wb转换为二进制数据
+    let wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+    //定义s2ab()函数，将字符串转换为ArrayBuffer
+    function s2ab(s) {
+        let buf = new ArrayBuffer(s.length);
+        let view = new Uint8Array(buf);
+        for (let i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+    }
+    //调用file-saver工具的saveAs()函数，将二进制数据转换为Blob对象，并保存为名为"评测结果汇总.xlsx"的文件
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '评测结果汇总.xlsx');
+},
+```
+
+### 6. 验证码在系统中的应用以及实现方式，并结合项目代码进行详细说明。
+
+#### 6.1 后端生成验证码并传回前端
+
+- 在`AuthController`中调用`getCode()`生成验证码并准备存储在`code`变量中。
+
+```java
+@RestController
+@RequestMapping("/admin-api/auth/")
+public class AuthController{
+    private String code;
+    ...
+    @RequestMapping("/captcha")
+    public void getCode(HttpServletResponse response) {
+    	...
+    }
+}
+```
+
+- 通过 `RandomGenerator` 类生成一个4位的随机数字串。
+
+```java
+RandomGenerator randomGenerator = new RandomGenerator("0123456789", 4);
+```
+
+- 调用 `CaptchaUtil.createLineCaptcha()`方法创建一个线条干扰的验证码图片对象，设置图片的显示大小为 150 x 30 像素。
+
+```java
+LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 30);
+```
+
+- 设置响应的内容类型为 `"image/jpeg"`，并设置响应头信息 `"Pragma"` 为 `"No-cache"`，以确保浏览器不缓存该验证码图片。
+
+```java
+response.setContentType("image/jpeg");
+response.setHeader("Pragma", "No-cache");
+```
+
+- 通过`setGenerator()`方法将之前指定好字符源类型的生成器`randomGenerator`设置给`lineCaptcha`以生成验证码图片。
+
+```java
+lineCaptcha.setGenerator(randomGenerator);
+```
+
+- 将验证码图片写入响应的输出流 `response.getOutputStream()`，以将验证码图片发送到前端。
+
+```java
+lineCaptcha.write(response.getOutputStream());
+```
+
+- 通过 `lineCaptcha.getCode()` 获取生成的验证码字符串，并存储用于验证。
+
+```java
+lineCaptcha.write(response.getOutputStream());
+code = lineCaptcha.getCode();
+```
+
+最后清除输出流的缓存并关闭输出流。
+
+#### 6.2 前端显示验证码并登录
+
+- 在`template`中加入验证码部分，输入框部分`v-model`绑定`loginForm`中的`captchaText`属性。
+
+```vue
+<el-input name="captchaText" style="width: 48%" type="text"
+          v-model="loginForm.captchaText" placeholder="请输入验证码" prefix-icon="el-icon-picture">
+</el-input>
+```
+
+- 图片设置了验证码图片的路径，从后端`/auth/captcha`路径获取验证码图片的接口，设置唯一id`captchaText`，并绑定了点击事件触发 `getCaptcha()` 方法。
+
+```vue
+<img src="http://localhost:28080/admin-api/auth/captcha" 
+     id="captchaText" height=30px width=150px 
+     @click="getCaptcha()" />
+```
+
+- `getCaptcha()` 方法将`id="captchaText"` 的元素的 `src` 属性更新为验证码图片的路径，并在末尾添加一个时间戳`new Date().getTime()`，避免浏览器缓存验证码图片，每次点击验证码图片都会生成一个新的请求，从而获取新的验证码图片。
+
+```js
+getCaptcha() {
+    document.getElementById("captchaText").src = "http://localhost:28080/admin-api/auth/captcha?" + new Date().getTime();
+},
+```
+
+- 执行`do_login()`方法进行登录时，会将验证码和账号密码一起传给后端
+
+```js
+login(this.loginForm.username,this.loginForm.password,this.loginForm.captchaText)
+```
+
+```js
+export function login(username, password, captchaText) {
+    const data = {
+        username,
+        password,
+        captchaText
+    }
+    return request({
+        url: '/auth/login',
+        method: 'post',
+        data: data
+    })
+}
+```
+
+- 后端`AuthController`的`login()`方法从请求体`loginUser`中取出验证码，并与之前存储的验证码进行比对，失败则返回50006号错误。
+
+```java
+if(!loginUser.getCaptchaText().equals(code)){
+    return CommonResult.error(50006,"登录失败，验证码不正确");
+}
+```
+
+- 前端如果收到50006，则报错并刷新验证码。
+
+```js
+if(res.code==50006){
+    this.$message.error("验证码错误")
+    document.getElementById("captchaText").src="http://localhost:28080/admin-api/auth/captcha?"+new Date().getTime();
+    this.loading=false
+    return
+}
+```
+
+### 7. 文件上传功能的实现方式以及如何对文件类型进行校验，并结合项目代码进行详细说明。
+
+#### 7.1 前端上传
+
+在`template`中定义上传按钮。
+
+```vue
+<div class="upload-card">
+    <h2>证明材料上传</h2>
+    <input type="file" ref="fileInput" @change="handleFileChange">
+    <button class="upload-btn" @click="uploadFile">上传</button>
+</div>
+```
+
+属性`@change="handleFileChange"`表示用户选择文件时，会触发`change`事件，并调用`handleFileChange()`函数。`event.target.files[0]`表示用户选择的文件列表中的第一个文件。这个文件将被赋值给`this.selectedFile`，在后续的上传操作中使用该文件进行处理。
+
+```js
+handleFileChange(event) {
+    this.selectedFile = event.target.files[0];
+},
+```
+
+属性`@click="uploadFile"`绑定点击事件调用`uploadFile()`函数。具体处理流程见函数注释：
+
+```js
+uploadFile() {
+    //this.selectedFile验证是否选择了要上传的文件
+    if (!this.selectedFile) {
+        this.$message.error('请选择要上传的文件');
+        return;
+    }
+    //设置允许上传的文件类型为['image/jpeg', 'image/png']
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(this.selectedFile.type)) {
+        this.$message.error('只能上传 JPG/PNG 格式的图片');
+        return;
+    }
+    //设置最大文件大小为2MB
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (this.selectedFile.size > maxSize) {
+        this.$message.error('上传图片大小不能超过 2MB');
+        return;
+    }
+    //通过上述验证后，调用api中的uploadFile()函数
+    uploadFile(this.selectedFile)
+        .then(response => {
+        this.handleSuccess(response, this.selectedFile);
+    })
+        .catch(error => {
+        console.error(error);
+        this.$message.error('文件上传失败');
+    });
+}
+```
+
+API中的`uploadFile()`函数。创建一个`FormData`对象，用于构建表单数据。将文件`file`添加到`formData`中传给后端相应路径，设置请求头的`Content-Type`为`multipart/form-data`，表示上传的是表单数据。
+
+```js
+export function uploadFile(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return request({
+        url: '/file/upload',
+        method: 'post',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+    })
+}
+```
+
+#### 7.2 后端存储
+
+- 后端使用`FileUploadController`类来接收处理文件。字段使用了`@Value`注解，用于从配置文件中读取配置值，分别包括允许的文件类型`allowedTypes`为jpg和png、最大文件大小`maxFileSize`为10485760字节即10MB，和文件上传路径`uploadPath`为user.dir。
+
+```java
+@Controller
+@RequestMapping("/admin-api")
+public class FileUploadController {
+    @Value("${file.allowed-types}")
+    private String allowedTypes;
+    @Value("${file.max-size}")
+    private long maxFileSize;
+    @Value("${file.upload-path}")
+    private String uploadPath;
+    ...
+}
+```
+
+```yaml
+file:
+  upload-path: ${user.dir}
+  allowed-types: jpg,png
+  max-size: 10485760
+```
+
+- 前端向`/file/upload`路径传文件，调用`uploadFile()`方法，首先验证文件的各项正确性。
+
+```java
+@PostMapping("/file/upload")
+@ResponseBody
+public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    if (file == null || file.isEmpty()) {
+        return "上传文件不能为空";
+    }
+    if (!StringUtils.hasText(uploadPath)) {
+        return "文件上传路径未配置";
+    }
+    if (!isFileTypeAllowed(file)) {
+        return "不允许上传该文件类型";
+    }
+    if (!isFileContentValid(file)) {
+        return "文件内容不合法";
+    }
+    if (file.getSize() > maxFileSize) {
+        return "文件大小超过限制";
+    }
+    ...
+}
+```
+
+- 其中`isFileTypeAllowed()`方法验证文件类型是否允许。调用`getFileExtension()`方法获取文件扩展名，不为空则从字符串转换为列表。`allowedTypes`类变量记录了允许的文件类型，用逗号分隔，如jpg，png等。最后使用`contains`方法来检查`allowedExtensions`列表中是否包含`fileExtension`变量的值。`fileExtension.toLowerCase()`是为了确保不区分文件扩展名的大小写，以避免因为大小写不同而导致的匹配问题。
+
+```java
+private boolean isFileTypeAllowed(MultipartFile file) {
+    String fileExtension = getFileExtension(file.getOriginalFilename());
+    if (fileExtension != null) {
+        List<String> allowedExtensions = Arrays.asList(allowedTypes.split(","));
+        return allowedExtensions.contains(fileExtension.toLowerCase());
+    }
+    return false;
+}
+
+private String getFileExtension(String fileName) {
+    if (StringUtils.hasText(fileName)) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1);
+        }
+    }
+    return null;
+}
+```
+
+- 而`isFileContentValid()`方法验证文件内容是否合法。
+
+```java
+private boolean isFileContentValid(MultipartFile file) throws IOException {
+    // 验证文件类型是否为图像类型
+    String contentType = file.getContentType();
+    if (contentType == null || !contentType.startsWith("image/")) {
+        return false;
+    }
+    // 示例：验证文件内容为图片（JPEG 或 PNG）
+    byte[] fileBytes = file.getBytes();
+    // JPEG 文件的文件头：FF D8 FF E0
+    // PNG 文件的文件头：89 50 4E 47 0D 0A 1A 0A
+    if (fileBytes.length >= 4) {
+        byte[] jpegHeader = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF, (byte) 0xE0};
+        byte[] pngHeader = {(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
+        return startsWith(fileBytes, jpegHeader) || startsWith(fileBytes, pngHeader);
+    }
+    return false;
+}
+
+private boolean startsWith(byte[] array, byte[] prefix) {
+    if (array.length < prefix.length) {
+        return false;
+    }
+    for (int i = 0; i < prefix.length; i++) {
+        if (array[i] != prefix[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+如果通过了所有的验证，开始处理文件上传。先调用 `generateUniqueFileName()` 方法，根据原始文件名生成唯一的文件名，确保文件名的唯一性。
+
+```java
+String fileName = generateUniqueFileName(file.getOriginalFilename());
+...
+private String generateUniqueFileName(String originalFileName) {
+    String fileExtension = getFileExtension(originalFileName);
+    String uniqueFileName = UUID.randomUUID().toString();
+    if (fileExtension != null) {
+        uniqueFileName += "." + fileExtension;
+    }
+    return uniqueFileName;
+}
+```
+
+使用上传路径 `uploadPath` 和生成的唯一文件名拼接构建文件保存路径`filePath`。再使用文件路径创建一个 `File` 对象。调用 `file.transferTo()` 方法，将上传的文件内容写入指定的文件对象。
+
+```java
+String filePath = uploadPath + File.separator + fileName;
+File dest = new File(filePath);
+file.transferTo(dest);
+```
+
+### 8. 提供项目中某个功能函数的单元测试实例，并结合项目代码进行详细说明。
+
+#### 8.1 测试实例描述
+
+测试类名为 `StudentResSitGetTest` ，用于测试获取学生研究情况的功能。包含以下方法：
+
+- `testGetResSitByStuNum()`: 测试根据`StuNum`即实际为`username`获取学生研究情况的方法。
+- `testGetResSitByStuNumNotFound()`: 测试学生研究情况不存在的方法。
+
+#### 8.2 测试方法说明
+
+##### 8.2.1方法 `testGetResSitByStuNum()`
+
+```java
+@Test
+public void testGetResSitByStuNum() {
+    // 准备测试数据
+    String username = "2200022701";
+    ResSitu expectedResSitu = new ResSitu("2200022701", "一等奖", "2023-07-01", "麦当劳", "冰杯");
+    ArrayList<ResSitu> expectedResSituList = new ArrayList<>();
+    expectedResSituList.add(expectedResSitu);
+    //模拟数据库操作的返回结果
+    when(resSituMapper.findByStuNum(username)).thenReturn(expectedResSituList);
+    //执行后端方法
+    ArrayList<ResSitu> actualResSituList = resSituMapper.findByStuNum(username);
+    Assertions.assertEquals(expectedResSituList, actualResSituList);
+}
+```
+
+该方法用于测试`StudentController`类中，学生用户获取已填写的研究情况的方法`getResearchList()`。`getResearchList()`方法源码如下：
+
+```java
+@GetMapping("/getResSitu")
+public CommonResult<?> getResearchList(@RequestHeader("Authorization") String authHeader) {
+    // 解析Authorization请求头中的JWT令牌 Bearer access_token
+    String token = authHeader.substring(7);
+    String username = jwtTokenUtil.getUsernameFromToken(token);
+
+    ArrayList<ResSitu> ResSitu = resSituMapper.findByStuNum(username);
+    return CommonResult.success(ResSitu);
+}
+```
+
+1. 准备测试数据：
+
+   - 设定学生学号为 "2200022701"。
+
+   - 创建一个预期的研究情况对象 `expectedResSitu`，其中包含学号、奖项等信息。
+
+   - 创建一个预期的研究情况列表 `expectedResSituList`，将 `expectedResSitu` 添加到列表中。
+
+     ```java
+     String username = "2200022701";
+     ResSitu expectedResSitu = new ResSitu("2200022701", "一等奖", "2023-07-01", "麦当劳", "冰杯");
+     ArrayList<ResSitu> expectedResSituList = new ArrayList<>();
+     expectedResSituList.add(expectedResSitu);
+     ```
+
+2. 模拟数据库操作的返回结果：
+
+   - 在测试之前执行初始化方法，用 Mockito 框架模拟 `ResSituMapper`对象。
+
+     ```java
+     @BeforeEach
+     public void setUp() {
+         //Mockito框架模拟ResSituMapper
+         MockitoAnnotations.openMocks(this);
+     }
+     
+      - 当调用 `findByStuNum(username)` 方法时，返回预期的研究情况列表 `expectedResSituList`。
+     
+        ```java
+        when(resSituMapper.findByStuNum(username)).thenReturn(expectedResSituList);
+     ```
+
+3. 执行后端方法：
+
+   - 调用 `resSituMapper.findByStuNum(username)` 方法，获取实际的研究情况列表 `actualResSituList`。
+
+     ```java
+     ArrayList<ResSitu> actualResSituList = resSituMapper.findByStuNum(username);
+     ```
+
+4. 断言验证：
+
+   - 使用 JUnit 的断言方法 `Assertions.assertEquals()`，比较预期的研究情况列表 `expectedResSituList` 和实际的研究情况列表 `actualResSituList` 是否相等。
+
+     ```java
+     Assertions.assertEquals(expectedResSituList, actualResSituList);
+     ```
+
+##### 8.2.2方法 `testGetResSitByStuNumNotFound()`
+
+该方法用于测试学生研究情况不存在。
+
+1. 准备测试数据：
+
+   - 随便乱打学生学号为 "5615963459"。
+
+2. 执行后端方法：
+
+   - 调用 `resSituMapper.findByStuNum(username)` 方法，获取实际的研究情况列表 `actualResSituList`。
+
+3. 断言验证：
+
+   - 创建一个空的研究情况列表 `nullList`。
+
+   - 使用 JUnit 的断言方法 `Assertions.assertEquals()`，比较预期的空研究情况列表 `nullList` 和实际的研究情况。
+
+     ```java
+     @Test
+     public void testGetResSitByStuNumNotFound() {
+         String username = "5615963459";
+         ArrayList<ResSitu> actualResSituList = resSituMapper.findByStuNum(username);
+         //验证结果是否为空
+         //不直接写null，实际上有个list，里面为空
+         ArrayList<ResSitu> nullList = new ArrayList<>();
+         Assertions.assertEquals(nullList, actualResSituList);
+     }
+     ```
+
+### 9. 如何使用前端VUE实现请求和响应的拦截，以及拦截函数中所实现的逻辑，并结合项目代码进行详细说明。
+
+#### 9.1 创建Axios实例
+
+本系统使用Axios库来实现请求和响应的拦截。在`request.js`文件中，通过`axios.create()`方法来创建实例时，可以设置一些默认的配置，如请求的基础URL、超时时间等。
+
+```js
+const service = axios.create({
+    baseURL: 'http://localhost:28080/admin-api', //本地部署
+    timeout: 5000
+});
+```
+
+#### 9.2 请求拦截
+
+通过`interceptors`对象的`request`属性来添加请求拦截器，通过`use()`方法传入两个回调函数：第一个回调函数用于在请求发送之前对请求数据进行处理，第二个回调函数用于处理请求错误。
+
+在第一个回调函数中，对请求的`config`对象进行处理。通过`getAccessToken()`函数判断是否存在访问令牌，如果存在，则将访问令牌添加到请求头的`Authorization`字段中，以实现每个请求都携带自定义的令牌。
+
+在第二个回调函数中，对请求错误进行处理。将错误打印到控制台，并通过`Promise.reject()`方法返回一个带有错误信息的拒绝状态的Promise对象，以便在后续的请求链中捕获和处理错误。
+
+```js
+service.interceptors.request.use(
+    config => {
+        // 在请求发送之前对请求数据进行处理
+        // ...
+        if (getAccessToken() ) {
+            config.headers['Authorization'] = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+        }
+        return config;
+    },
+    error => {
+        // 对请求错误做些什么
+        console.log(error);
+        return Promise.reject(error);
+    }
+);
+```
+
+#### 9.3 响应拦截
+
+通过`interceptors`对象的`response`属性来添加响应拦截器，同样通过`use()`方法传入两个回调函数：第一个回调函数用于在接收到响应后对响应数据进行处理，第二个回调函数用于处理响应错误。
+
+在第一个回调函数中，可以对响应数据进行处理，对数据进行格式化、提取所需的信息等。此处直接返回了响应数据的`data`属性，以便后续的处理逻辑使用。
+
+在第二个回调函数中，可以对响应错误进行处理。将错误打印到控制台，并通过`Promise.reject()`方法返回一个带有错误信息的拒绝状态的Promise对象，以便在后续的请求链中捕获和处理错误。
+
+```js
+service.interceptors.response.use(
+    response => {
+        // 对响应数据进行处理
+        // ...
+        return response.data;
+    },
+    error => {
+        // 对响应错误做些什么
+        console.log(error);
+        return Promise.reject(error);
+    }
+);
+```
+
+通过使用请求和响应拦截器，实现全局的请求和响应处理逻辑，避免在每个请求或响应的地方重复编写相同的逻辑，提高代码的复用性和维护性。
+
+### 10. 提供系统的整体架构图，并进行详细解读。
+
+<img src="https://alstonw.oss-cn-hangzhou.aliyuncs.com/image/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt="系统架构图" style="zoom: 67%;" />
+
+#### 10.1 用户界面层、文件处理层、交互层
+
+用户界面层主要通过Vue2.0和Element-UI构建用户交互界面。
+
+文件处理层只有部分界面使用，主要为需要上传材料、导入导出学生表格的功能。
+
+交互层通过浏览器的页面渲染使用户进行可视化交互，用户操作通过Post或Get请求与后端进行交互。
+
+#### 10.2 业务层、数据访问层、数据库
+
+前端请求通过写明的API接口到后端Controller中的相应路径调用方法，使用相应业务，如学生填写信息和材料的上传，评委查看信息的获取和评分的上传等。
+
+通常控制层与业务层相互分离，在本系统中业务较为简单，则API接口所在的控制层与业务服务合并为业务层。
+
+数据访问层通过mapper接口和mapper.xml进行数据的增删改查，数据库使用的MySql。
+
+
+
+## 第四部分：源代码和部署指南
+
+### 1. 源码链接
+
+前端：https://gitee.com/wangtuoxin/FengShenBang
+
+后端：https://gitee.com/wangtuoxin/FengShenBang_Spring
+
+### 2. 部署步骤
+
+系统数据库已部署在远程服务器，地址为`123.57.146.164:3306/testa`，username为`fengshenbang`，password为`minjie5SON?`。已配置在后端`application.yml`文件中。
+
+只需启动后端主程序，前端终端运行`npm run serve`，即可通过`http://localhost:8080/ `访问系统。
+
+前端有可能报错，需要终端运行`npm install file-saver --save`，但配置文件中有记录安装`file-saver`工具，暂不明白报错原因。
+
+### 3. 代码组织结构说明
+
+#### 3.1 后端文件结构
+
+```c
+D:.\SRC\MAIN
+├─java
+│  └─com
+│      └─example
+│          └─fengshenbang_spring
+│              ├─common
+│              ├─config
+│              ├─controller
+│              │  └─VO
+│              ├─handler
+│              ├─intercepter
+│              ├─mapper
+│              │  └─DO
+│              ├─service
+│              ├─upload
+│              └─utils
+└─resources
+    └─mapper
+```
+
+1. java目录：com.example.fengshenbang_spring是项目的基础包，用于存放所有Java源代码。
+   - common：包含了`CommonResult.java`，用于定义通用的返回结果对象。
+   - config：包含配置文件或配置类，用于项目的配置。跨域配置`GlobalCorsConfig.java`、Swagger配置`SwaggerConfig.java`和Web MVC配置`WebMvcConfig.java`。
+   - controller：包含控制器类，处理HTTP请求并返回响应。每个控制器类对应具体的功能模块，也根据角色权限的安全性考虑作了不同程度的封装。例如学生上传各类信息的功能都放在同一个控制器里`StudentController.java`，负责不同部分评分的评委则封装成不同的控制器，比如科研情况评分`JudgeResSituController.java`)、社会实践评分(`JudgeSocPracController.java`)等。
+     - VO：包含了各个值对象类，用于向控制器中传输数据。比如登录请求对象`LoginReqVO`，科研情况对象`ResSituVO`。
+   - handler：包含处理器类，用于处理特定的请求或事件。主要为全局异常处理器`GlobalExceptionHandler.java`，用于捕获和处理全局异常。
+   - intercepter：包含拦截器类，用于拦截请求并进行处理。有自定义的拦截器`MyInterceptor.java`和拦截器配置类`MyInterceptorConfig.java`。
+   - mapper：包含数据访问层的映射器接口，用于与数据库进行交互。
+     - DO：包含各个数据对象类（Data Object），分别与数据库表的结构对应。
+   - service：包含服务类，用于实现业务逻辑。本系统业务比较简单，因此很多业务处理放在各个`Controller`中实现，也有部分分离出来写为了服务类。如学生GPA导入服务`StudentGPAService、`学生信息导入服务`StudentInfoService`、学生志愿情况导入服务`StudentVolSerService`。
+   - upload：包含了文件上传相关的控制器类`FileUploadController`。
+   - utils：包含一些通用的工具类。如日期格式转换工具`DateFormatConvert`、JWT令牌工具`JwtTokenUtil`和学生GPA导入监听器`StudentGPAListener`等。
+2. resources目录：
+   - mapper：与mapper接口一一对应，包含各个映射器文件，用于定义数据库表与Java对象之间的映射关系。
+
+#### 3.2 前端文件结构
+
+```c
+D:.\SRC
+├─api
+├─assets
+│  └─lib
+├─components
+├─layout
+├─router
+├─store
+├─utils
+└─views
+    └─user
+        ├─judge
+        ├─staff
+        └─student
+```
+
+- api：用于存放与后端接口通信的API文件，与后端`Controller`的路径对应。
+- assets：存放静态资源文件，如图像、样式表等。
+  - lib：存放第三方库文件。有设置异步延迟间隔的函数`delay()`、按照二进制读取文件`readFile()`等。
+- components：包含可复用组件文件，本系统主要以复用view为主，只有`HelloWorld.vue`一个示例组件。
+- layout：用于定义应用程序的整体布局组件。`index.vue`是主布局组件，定义了应用程序的整体布局结构，并使用了动态菜单。
+- router：包含了路由相关的配置文件，用于管理应用程序的路由。`index.js`是路由配置文件，定义了应用程序的路由。
+- store：用于存放应用程序的状态管理相关的文件，如Vuex存储相关的配置文件。`index.js`是Vuex状态管理配置文件，用于管理应用程序的全局状态。
+- utils：包含了一些工具函数或通用函数，供其他文件使用。如`auth.js`提供了与用户权限相关的工具函数，`request.js`定义了拦截器。
+- views：包含了应用程序中的各个视图页面。
+  - user：是用户相关的视图页面的父目录，其中包含了不同用户角色的子目录。
+    - judge：包含了评委用户相关功能的视图页面。
+    - staff：包含了学工用户相关功能的视图页面。
+    - student：包含了学生用户相关功能的视图页面。
+
+#### 3.3 代码组织说明
+
+根据本项目的工作过程，有一些保持代码结构清晰、模块化和可扩展，以方便团队协作和项目维护的编码规则：
+
+1. **模块化组织**：将代码按照模块的功能和责任进行组织。在前端使用文件夹来组织相关的组件、视图、API请求等。在后端使用包的方式来组织相关的业务逻辑、数据访问、配置等。
+
+   尽管不同业务的具体实现可能有差距，但同类文件间有相似的逻辑，比如多个服务中都会用到`@Data`的注解以便捷获取数据；有类似的变量；用到`mapper`接口与数据库交互等，可以相互参照以避免逻辑错漏。
+
+2. **抽象和封装**：将共享的功能和逻辑进行抽象和封装，以便在需要时进行重用。创建可重用的组件、工具类、服务等，提供清晰的接口和文档，减少重复代码的产生。比如多个功能中后端要接收前端传入的日期数据都需要转换格式，因此编写统一的`DateFormatConvert`工具。
+
+3. **合理的命名规范**：采用一致的命名规范来命名文件、类、函数和变量，以提高代码的可读性和可理解性。使用有意义的名称，以加快理解文件用途。
+
+4. **良好的文档和注释**：编写清晰的文档和注释，解释代码的功能、目的和用法，有助于其他人理解代码，减少沟通和协作的成本，并且方便后续维护和修改。因为有很多同类文件逻辑相似，可以直接改动相应的变量、字段等进行复用，但不同成员编写可能有错漏，因此写必要的注释能避免这些问题。
+
+5. **代码风格一致性**：在团队中制定和遵循统一的代码风格规范，包括缩进、命名约定、代码布局等方面。这样可以增加代码的可读性，减少理解和调试代码时的困惑。
+
+   
+
+## 第五部分：总结
+
+在完成这个工作量较大的合作项目中获得了很多经验，尽管是踩了不少坑才学到的。感触最深的有下面几点：
+
+1. **项目架构**
+
+   能在项目初期就清晰地建立起代码架构，会对实现的过程有很大帮助。但很难做到，所以我中期又对项目的文件结构进行了重构。难怪别人说能重构是一种能力，能不重构是一种更厉害的能力。
+
+   并且项目架构的细度也很值得斟酌。如果划分得太细了会造成不必要的阅读障碍，太简洁了会影响到后续加需求的扩展性。
+
+2. **团队协作和职责划分**
+
+   团队合作是很考验耐心和能力的一件事，尤其是成员之间编码能力或者态度不一致的时候。职责的划分一定要明确，并且同一个人要包含掉类似的职责。
+
+   比如我们的项目一开始是我先初步做了架构，选了科研情况这一部分，把学生和评委的前后端都写完调通。之后其他的功能因为是类似的，就可以照着改变量之类。但一个同学只把其他功能的文件写完没有调通，然后给了另一个同学来调，他就只能从头读代码，并且还不知道里面是哪里没改好，零零碎碎出了很多bug要de，很费时间。
+
+3. **文档和注释**
+
+   当然如果实现的时候写了更详细的文档和注释，能更快地拉通成员之间的项目理解。我写第一部分的时候在一些比较关键的地方注释了要注意改动，但其他成员没写过这些部分，不能理解有些地方的逻辑关联，实现其他类似部分的时候就注意不到。
+
+
+
