@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.MarkMapper">
+<!-- 需要在导入学生信息时先把成绩表的用户名先写好才能用update-->
+    <select id="findAllResSitu" resultMap="ResSituMarkResultMap">
+        SELECT username, rsmark FROM marklist
+    </select>
+<!--这两个是联动的-->
+    <resultMap id="ResSituMarkResultMap" type="com.example.fengshenbang_spring.mapper.DO.Mark">
+        <id property="username" column="username" />
+        <result property="mark" column="rsmark" />
+    </resultMap>
+
+    <update id="insertResSituMark" parameterType="com.example.fengshenbang_spring.mapper.DO.Mark">
+        UPDATE marklist SET rsmark = #{mark} WHERE username = #{username}
+    </update>
+
+    <select id="findAllWorServ" resultMap="WorServMarkResultMap">
+        SELECT username, wsmark FROM marklist
+    </select>
+    <!--这两个是联动的-->
+    <resultMap id="WorServMarkResultMap" type="com.example.fengshenbang_spring.mapper.DO.Mark">
+        <id property="username" column="username" />
+        <result property="mark" column="wsmark" />
+    </resultMap>
+
+    <update id="insertWorServMark" parameterType="com.example.fengshenbang_spring.mapper.DO.Mark">
+        UPDATE marklist SET wsmark = #{mark} WHERE username = #{username}
+    </update>
+
+    <select id="findAllSocPrac" resultMap="SocPracMarkResultMap">
+        SELECT username, spmark FROM marklist
+    </select>
+    <!--这两个是联动的-->
+    <resultMap id="SocPracMarkResultMap" type="com.example.fengshenbang_spring.mapper.DO.Mark">
+        <id property="username" column="username" />
+        <result property="mark" column="spmark" />
+    </resultMap>
+
+    <update id="insertSocPracMark" parameterType="com.example.fengshenbang_spring.mapper.DO.Mark">
+        UPDATE marklist SET spmark = #{mark} WHERE username = #{username}
+    </update>
+
+    <select id="findAllPerStat" resultMap="PerStatMarkResultMap">
+        SELECT `username`, `psmark` FROM marklist
+    </select>
+    <!--这两个是联动的-->
+    <resultMap id="PerStatMarkResultMap" type="com.example.fengshenbang_spring.mapper.DO.Mark">
+        <id property="username" column="username" />
+        <result property="mark" column="psmark" />
+    </resultMap>
+
+    <update id="insertPerStatMark" parameterType="com.example.fengshenbang_spring.mapper.DO.Mark">
+        UPDATE marklist SET psmark = #{mark} WHERE username = #{username}
+    </update>
+
+
+
+
+</mapper>

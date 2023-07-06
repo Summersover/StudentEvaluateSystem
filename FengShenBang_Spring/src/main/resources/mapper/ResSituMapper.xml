@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.ResSituMapper">
+
+    <!--注意修改parameterType-->
+
+    <select id="findByStuNum" resultType="com.example.fengshenbang_spring.mapper.DO.ResSitu">
+        SELECT username, `rank`, time, place, prize
+        FROM researchsituation WHERE username = #{username}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM researchsituation WHERE username = #{username}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.fengshenbang_spring.mapper.DO.ResSitu">
+        INSERT INTO researchsituation (username, `rank`, time, place, prize)
+        VALUES (#{username}, #{rank}, #{time}, #{place}, #{prize})
+    </insert>
+
+    <delete id="delete" parameterType="com.example.fengshenbang_spring.mapper.DO.ResSitu">
+        DELETE FROM researchsituation WHERE username = #{username} AND `rank` = #{rank}
+    </delete>
+</mapper>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.MenuMapper">
+    <select id="findRole" resultType="String">
+        SELECT r.role_name
+        FROM UserRole ur
+                 JOIN Role r ON r.Id = ur.role_id
+        WHERE ur.username = #{username};
+    </select>
+
+    <select id="findMenu" resultType="com.example.fengshenbang_spring.mapper.DO.Menu">
+        SELECT m.name, m.path, m.component
+        FROM UserRole ur
+                 JOIN RoleMenu rm ON rm.role_id = ur.role_id
+                 JOIN Menu m ON m.Id = rm.menu_id
+        WHERE ur.username = #{username};
+    </select>
+
+
+</mapper>

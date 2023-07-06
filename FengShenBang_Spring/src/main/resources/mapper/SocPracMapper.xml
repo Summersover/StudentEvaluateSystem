@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.SocPracMapper">
+
+    <!--注意修改parameterType-->
+
+    <select id="findByStuNum" resultType="com.example.fengshenbang_spring.mapper.DO.SocPrac">
+        SELECT username, initiator, spot, days, size, post, online, award, awardname
+        FROM socialpractice WHERE username = #{username}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM socialpractice WHERE username = #{username}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.fengshenbang_spring.mapper.DO.SocPrac">
+        INSERT INTO socialpractice (username, initiator, spot, days, size, post, online, award, awardname)
+        VALUES (#{username}, #{initiator}, #{spot}, #{days}, #{size}, #{post}, #{online}, #{award}, #{awardname})
+    </insert>
+
+    <delete id="delete" parameterType="com.example.fengshenbang_spring.mapper.DO.SocPrac">
+        DELETE FROM socialpractice WHERE username = #{username} AND `spot` = #{spot}
+    </delete>
+
+</mapper>

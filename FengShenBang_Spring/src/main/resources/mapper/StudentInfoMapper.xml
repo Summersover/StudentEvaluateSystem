@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.StudentInfoMapper">
+
+    <insert id="insertStudentInfo" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentInfo">
+        INSERT INTO marklist (username, name)
+        VALUES (#{username}, #{name})
+    </insert>
+
+    <insert id="insertMarkList" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentInfo">
+        INSERT INTO studentlist (username, name)
+        VALUES (#{username}, #{name})
+    </insert>
+
+    <select id="getAll" resultType="com.example.fengshenbang_spring.mapper.DO.StudentInfo">
+        SELECT username, name FROM studentlist
+    </select>
+
+</mapper>
+

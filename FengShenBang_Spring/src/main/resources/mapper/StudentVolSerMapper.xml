@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.StudentVolSerMapper">
+    <insert id="insertStudentVolSer" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentVolSer">
+        INSERT INTO volserlist (username, name, time, vsmark)
+        VALUES (#{username}, #{name}, #{time}, #{vsmark})
+    </insert>
+
+    <insert id="insertMarkList" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentVolSer">
+        UPDATE marklist SET vsmark = #{vsmark} WHERE username = #{username}
+    </insert>
+
+    <select id="findByStuNum" resultType="com.example.fengshenbang_spring.mapper.DO.StudentVolSer">
+        SELECT username, `name`, `time`
+        FROM volserlist WHERE username = #{username}
+    </select>
+
+    <!-- 查询 -->
+    <select id="findAllVolSer" resultMap="StudentVolSerResultMap">
+        SELECT username, `name`, `time`, vsmark FROM volserlist
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="StudentVolSerResultMap" type="com.example.fengshenbang_spring.mapper.DO.StudentVolSer">
+        <id property="username" column="username" />
+        <result property="name" column="name" />
+        <result property="time" column="time" />
+        <result property="vsmark" column="vsmark" />
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.TotalMarkMapper">
+    <!-- 从 gpalist 数据表中获取 gpmark 数据 -->
+    <select id="findGpmarkByUsername" resultType="java.lang.String">
+        SELECT gpmark FROM gpalist WHERE username = #{username}
+    </select>
+
+    <!-- 在导入学生信息时先将成绩表的用户名写入并更新 -->
+    <update id="updateMarklistWithGpmark" parameterType="com.example.fengshenbang_spring.mapper.DO.TotalMark">
+        UPDATE marklist
+        SET gpmark = #{gpmark}
+        WHERE username = #{username}
+    </update>
+
+    <!-- 查询评测结果 -->
+    <select id="findAllTotalMark" resultMap="TotalMarkResultMap">
+        SELECT username, `name`, rsmark, wsmark, spmark, psmark, gpmark, vsmark, totmark FROM marklist
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="TotalMarkResultMap" type="com.example.fengshenbang_spring.mapper.DO.TotalMark">
+        <id property="username" column="username" />
+        <result property="name" column="name" />
+        <result property="rsmark" column="rsmark" />
+        <result property="wsmark" column="wsmark" />
+        <result property="spmark" column="spmark" />
+        <result property="psmark" column="psmark" />
+        <result property="gpmark" column="gpmark" />
+        <result property="vsmark" column="vsmark" />
+        <result property="totmark" column="totmark" />
+    </resultMap>
+
+    <select id="getUsername" resultType="String">
+        SELECT name FROM studentlist WHERE username = #{username}
+    </select>
+
+    <update id="insertTotalMark" parameterType="com.example.fengshenbang_spring.mapper.DO.TotalMark">
+        UPDATE marklist SET totmark = #{totmark} WHERE username = #{username}
+    </update>
+</mapper>

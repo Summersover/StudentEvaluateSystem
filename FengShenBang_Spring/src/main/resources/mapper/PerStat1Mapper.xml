@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.PerStat1Mapper">
+
+    <!--注意修改parameterType-->
+
+    <select id="findByStuNum" resultType="com.example.fengshenbang_spring.mapper.DO.PerStat1">
+        SELECT username, time, spot, level, role, eventname
+        FROM personalstatement1 WHERE username = #{username}
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM personalstatement1 WHERE username = #{username}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.fengshenbang_spring.mapper.DO.PerStat1">
+        INSERT INTO personalstatement1 (username, time, spot, level, role, eventname)
+        VALUES (#{username}, #{time}, #{spot}, #{level}, #{role}, #{eventname})
+    </insert>
+
+    <delete id="delete" parameterType="com.example.fengshenbang_spring.mapper.DO.PerStat1">
+        DELETE FROM personalstatement1 WHERE username = #{username} AND `eventname` = #{eventname}
+    </delete>
+</mapper>

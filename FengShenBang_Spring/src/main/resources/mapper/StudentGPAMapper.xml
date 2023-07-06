@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.fengshenbang_spring.mapper.StudentGPAMapper">
+    <insert id="insertStudentGPA" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentGPA">
+        INSERT INTO gpalist (username, `name`, grade, gpa, gpmark)
+        VALUES (#{username}, #{name}, #{grade}, #{gpa}, #{gpmark})
+    </insert>
+
+    <insert id="insertMarkList" parameterType="com.example.fengshenbang_spring.mapper.DO.StudentGPA">
+        UPDATE marklist SET gpmark = #{gpmark} WHERE username = #{username}
+    </insert>
+
+    <select id="findByStuNum" resultType="com.example.fengshenbang_spring.mapper.DO.StudentGPA">
+        SELECT username, `name`, `grade`, gpa
+        FROM gpalist WHERE username = #{username}
+    </select>
+
+    <!-- 查询 -->
+    <select id="findAllGPA" resultMap="StudentGPAResultMap">
+        SELECT username, `name`, `grade`, gpa, gpmark FROM gpalist
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="StudentGPAResultMap" type="com.example.fengshenbang_spring.mapper.DO.StudentGPA">
+        <id property="username" column="username" />
+        <result property="name" column="name" />
+        <result property="grade" column="grade" />
+        <result property="gpa" column="gpa" />
+        <result property="gpmark" column="gpmark" />
+    </resultMap>
+</mapper>
